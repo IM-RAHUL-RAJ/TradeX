@@ -1,0 +1,19 @@
+<aside class="sidebar">
+  <div class="brand-header">
+    <img src="tradeXlogo.png" alt="TradeX Logo" class="logo">
+    <div class="company-name">{{ companyName }}</div>
+  </div>
+  <nav>
+    <ul>
+      <!-- Regular menu items -->
+      <li *ngFor="let item of menuItems" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+        <a [routerLink]="item.route">{{ item.label }}</a>
+      </li>
+      
+      
+      <li *ngIf="showRoboAdvisor" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+        <a routerLink="/robo-advisor"> Robo Advisor</a>
+      </li>
+    </ul>
+  </nav>
+</aside>

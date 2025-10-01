@@ -1,0 +1,57 @@
+<div class="login-page-container">
+  <div class="login-box">
+    <div class="welcome-side">
+      <div class="logo-placeholder">
+        <!-- Replace src with your actual logo or remove if you want text only -->
+        <img src="tradeXlogo.png" alt="Logo" />
+      </div>
+      <h2>Welcome to TradeX app!</h2>
+    </div>
+
+    <div class="form-side">
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form" novalidate>
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input
+            id="email"
+            type="email"
+            formControlName="email"
+            placeholder="Enter your email"
+            autocomplete="username"
+          />
+          <div class="validation-error" *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched">
+            <div *ngIf="loginForm.get('email')?.errors?.['required']">Email is required.</div>
+            <div *ngIf="loginForm.get('email')?.errors?.['email']">Please enter a valid email address.</div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input
+            id="password"
+            type="password"
+            formControlName="password"
+            placeholder="Enter your password"
+            autocomplete="current-password"
+          />
+          <div class="validation-error" *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
+            <div *ngIf="loginForm.get('password')?.errors?.['required']">Password is required.</div>
+            <div *ngIf="loginForm.get('password')?.errors?.['minlength']">Password must be at least 8 characters.</div>
+            <div *ngIf="loginForm.get('password')?.errors?.['pattern']">
+              Password must contain uppercase, lowercase, number, and special character.
+            </div>
+          </div>
+        </div>
+
+        <button type="submit" [disabled]="loginForm.invalid">Login</button>
+
+        <!-- Register prompt moved here inside the form -->
+        <p class="register-prompt">
+          Need an account?
+          <a routerLink="/email-verification" class="register-link">Register</a>
+
+        </p>
+      </form>
+    </div>
+  </div>
+</div>

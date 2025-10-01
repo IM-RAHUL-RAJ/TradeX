@@ -1,0 +1,56 @@
+<!-- <app-header></app-header> -->
+
+<div class="pref-header-bar">
+  <img src="tradeXlogo.png" alt="Logo" class="logo" />
+  <span class="brand-text">TradeX</span>
+</div>
+
+<div class="pref-card">
+  <h1 class="form-title">Investment Preferences</h1>
+  <form [formGroup]="preferencesForm" (ngSubmit)="onSubmit()">
+    <div class="form-row">
+      <label for="purpose">Investment Purpose</label>
+      <select id="purpose" formControlName="purpose">
+        <option value="" disabled>Select</option>
+        <option *ngFor="let r of purposeOptions" [value]="r">{{ r }}</option>
+      </select>
+    </div>
+
+    <div class="form-row">
+      <label for="risk">Risk tolerance</label>
+      <select id="risk" formControlName="risk">
+        <option value="" disabled>Select</option>
+        <option *ngFor="let r of riskOptions" [value]="r">{{ r }}</option>
+      </select>
+    </div>
+
+    <div class="form-row">
+      <label for="income">Income category</label>
+      <select id="income" formControlName="income">
+        <option value="" disabled>Select</option>
+        <option *ngFor="let i of incomeOptions" [value]="i">{{ i }}</option>
+      </select>
+    </div>
+
+    <div class="form-row">
+      <label for="length">Length of investment</label>
+      <select id="length" formControlName="length">
+        <option value="" disabled>Select</option>
+        <option *ngFor="let l of lengthOptions" [value]="l">{{ l }}</option>
+      </select>
+    </div>
+
+    <div class="form-row checkbox-row">
+      <input type="checkbox" id="roboAdvisor" formControlName="roboAdvisor" />
+      <label for="roboAdvisor"class="checkbox-label">I accept the Robo-advisor terms and conditions</label>
+    </div>
+
+    <button type="submit" [disabled]="preferencesForm.invalid" class="submit-btn">
+      {{ isUpdate ? 'Update' : 'Save' }}
+    </button>
+
+    <p *ngIf="message" class="status-message">{{ message }}</p>
+  </form>
+</div>
+
+<!-- <app-footer></app-footer> -->

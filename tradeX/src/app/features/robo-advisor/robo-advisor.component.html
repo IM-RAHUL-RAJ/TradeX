@@ -1,0 +1,318 @@
+<div class="dashboard-container">
+  <app-sidebar></app-sidebar>
+
+  <main class="main-content">
+    <app-navbar></app-navbar>
+
+    <div class="robo-advisor-container">
+      <!-- Header Section -->
+      <div class="header-section">
+        <div class="header-info">
+          <h2 class="page-title">🤖 AI Robo Advisor</h2>
+          <p class="page-subtitle">Powered by Google Gemini AI</p>
+        </div>
+        <div class="client-info">
+          <span class="client-id">Client: {{ currentClientId }}</span>
+          <button class="btn btn-outline-secondary btn-sm" (click)="goToPreferences()">
+            ⚙️ Preferences
+          </button>
+        </div>
+      </div>
+
+      <!-- Last Updated -->
+      <div class="last-updated" *ngIf="lastUpdated">
+        <small>Last updated: {{ lastUpdated }}</small>
+      </div>
+
+      <!-- Message Display -->
+      <div *ngIf="message" class="alert-message" 
+           [class.alert-success]="messageType === 'success'"
+           [class.alert-error]="messageType === 'error'"
+           [class.alert-warning]="messageType === 'warning'"
+           [class.alert-info]="messageType === 'info'">
+        {{ message }}
+        <button class="close-btn" (click)="clearMessage()">×</button>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="action-buttons">
+        <button class="btn btn-primary btn-lg" 
+                (click)="getAllInsights()" 
+                [disabled]="loading">
+          <span *ngIf="loading" class="spinner"></span>
+          <span *ngIf="!loading">🤖</span>
+          {{ loading ? 'Analyzing...' : 'Get AI Analysis' }}
+        </button>
+
+        <div class="btn-group">
+          <button class="btn btn-outline-primary" 
+                  (click)="getStockRecommendations()" 
+                  [disabled]="recommendationsLoading">
+            <span *ngIf="recommendationsLoading" class="spinner-sm"></span>
+            <span *ngIf="!recommendationsLoading">📈</span>
+            Stocks
+          </button>
+          
+          <button class="btn btn-outline-info" 
+                  (click)="getPortfolioAnalysis()" 
+                  [disabled]="portfolioLoading">
+            <span *ngIf="portfolioLoading" class="spinner-sm"></span>
+            <span *ngIf="!portfolioLoading">🛡️</span>
+            Portfolio
+          </button>
+          
+          <button class="btn btn-outline-success" 
+                  (click)="getMarketInsights()" 
+                  [disabled]="insightsLoading">
+            <span *ngIf="insightsLoading" class="spinner-sm"></span>
+            <span *ngIf="!insightsLoading">🌍</span>
+            Market
+          </button>
+        </div>
+
+        <button class="btn btn-outline-secondary" (click)="refreshData()">
+          🔄 Refresh
+        </button>
+      </div>
+
+      <!-- Tabs Navigation -->
+      <div class="tabs-container" *ngIf="stockRecommendations.length > 0 || portfolioAnalysis || marketInsights">
+        <div class="tab-buttons">
+          <button class="tab-btn" 
+                  [class.active]="activeTab === 'recommendations'"
+                  (click)="setActiveTab('recommendations')">
+            📈 Stock Recommendations
+            <span class="badge" *ngIf="stockRecommendations.length > 0">
+              {{ stockRecommendations.length }}
+            </span>
+          </button>
+          
+          <button class="tab-btn" 
+                  [class.active]="activeTab === 'portfolio'"
+                  (click)="setActiveTab('portfolio')">
+            🛡️ Portfolio Analysis
+          </button>
+          
+          <button class="tab-btn" 
+                  [class.active]="activeTab === 'insights'"
+                  (click)="setActiveTab('insights')">
+            🌍 Market Insights
+          </button>
+        </div>
+      </div>
+
+      <!-- Tab Content -->
+      <div class="tab-content">
+        
+        <!-- Stock Recommendations Tab -->
+        <div *ngIf="activeTab === 'recommendations'">
+          <div *ngIf="stockRecommendations.length > 0" class="recommendations-section">
+            
+            <!-- Overall Strategy -->
+            <div class="strategy-card" *ngIf="overallStrategy">
+              <h5>💡 AI Investment Strategy</h5>
+              <p>{{ overallStrategy }}</p>
+            </div>
+
+            <!-- Export Button -->
+            <div class="export-section">
+              <button class="btn btn-success" (click)="exportRecommendations()">
+                📥 Export CSV
+              </button>
+            </div>
+
+            <!-- Recommendations Grid -->
+            <div class="recommendations-grid">
+              <div class="stock-card" *ngFor="let stock of stockRecommendations">
+                <div class="stock-header">
+                  <h6>{{ stock.symbol }}</h6>
+                  <span class="recommendation-badge" 
+                        [class.buy]="stock.recommendation === 'BUY'"
+                        [class.hold]="stock.recommendation === 'HOLD'"
+                        [class.sell]="stock.recommendation === 'SELL'">
+                    {{ stock.recommendation }}
+                  </span>
+                </div>
+                
+                <div class="stock-company">{{ stock.companyName }}</div>
+                
+                <div class="stock-details">
+                  <div class="detail-row">
+                    <span>Target Price:</span>
+                    <span>{{ formatCurrency(stock.targetPrice) }}</span>
+                  </div>
+                  
+                  <div class="detail-row">
+                    <span>Risk Level:</span>
+                    <span class="risk-badge" 
+                          [class.low]="stock.riskLevel === 'LOW'"
+                          [class.medium]="stock.riskLevel === 'MEDIUM'"
+                          [class.high]="stock.riskLevel === 'HIGH'">
+                      {{ stock.riskLevel }}
+                    </span>
+                  </div>
+                  
+                  <div class="detail-row">
+                    <span>Allocation:</span>
+                    <span>{{ formatPercentage(stock.allocationPercentage) }}</span>
+                  </div>
+                </div>
+                
+                <div class="stock-reasoning">
+                  <small><strong>AI Reasoning:</strong> {{ stock.reasoning }}</small>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- No Recommendations Message -->
+          <div *ngIf="stockRecommendations.length === 0 && !recommendationsLoading" class="no-data">
+            <div class="no-data-icon">📈</div>
+            <h5>No Stock Recommendations</h5>
+            <p>Click "Get AI Analysis" to generate personalized stock recommendations</p>
+          </div>
+        </div>
+
+        <!-- Portfolio Analysis Tab -->
+        <div *ngIf="activeTab === 'portfolio'">
+          <div *ngIf="portfolioAnalysis" class="portfolio-section">
+            <div class="analysis-grid">
+              
+              <!-- Risk Overview Card -->
+              <div class="analysis-card">
+                <h5>🛡️ Risk Assessment</h5>
+                
+                <div class="risk-score-display">
+                  <div class="score-circle" 
+                       [class.low]="portfolioAnalysis.overallRisk === 'LOW'"
+                       [class.medium]="portfolioAnalysis.overallRisk === 'MEDIUM'"
+                       [class.high]="portfolioAnalysis.overallRisk === 'HIGH'">
+                    <span class="score-number">{{ portfolioAnalysis.riskScore }}/10</span>
+                  </div>
+                  <div class="risk-label" 
+                       [class.low]="portfolioAnalysis.overallRisk === 'LOW'"
+                       [class.medium]="portfolioAnalysis.overallRisk === 'MEDIUM'"
+                       [class.high]="portfolioAnalysis.overallRisk === 'HIGH'">
+                    {{ portfolioAnalysis.overallRisk }} RISK
+                  </div>
+                </div>
+                
+                <div class="diversification-info">
+                  <strong>Diversification:</strong> 
+                  <span class="diversification-badge">{{ portfolioAnalysis.diversificationLevel }}</span>
+                </div>
+              </div>
+
+              <!-- Risk Factors Card -->
+              <div class="analysis-card">
+                <h5>⚠️ Risk Factors</h5>
+                <ul class="risk-factors">
+                  <li *ngFor="let factor of portfolioAnalysis.riskFactors">{{ factor }}</li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- AI Recommendations Card -->
+            <div class="analysis-card full-width">
+              <h5>🤖 AI Portfolio Recommendations</h5>
+              <p>{{ portfolioAnalysis.recommendations }}</p>
+            </div>
+          </div>
+
+          <!-- No Portfolio Analysis Message -->
+          <div *ngIf="!portfolioAnalysis && !portfolioLoading" class="no-data">
+            <div class="no-data-icon">🛡️</div>
+            <h5>No Portfolio Analysis</h5>
+            <p>Click "Portfolio" to get AI-powered risk analysis</p>
+          </div>
+        </div>
+
+        <!-- Market Insights Tab -->
+        <div *ngIf="activeTab === 'insights'">
+          <div *ngIf="marketInsights" class="insights-section">
+            <div class="insights-grid">
+              
+              <!-- Market Trend Card -->
+              <div class="insight-card market-trend">
+                <h6>📈 Market Trend</h6>
+                <div class="trend-value" 
+                     [class.bullish]="marketInsights.marketTrend === 'BULLISH'"
+                     [class.bearish]="marketInsights.marketTrend === 'BEARISH'"
+                     [class.neutral]="marketInsights.marketTrend === 'NEUTRAL'">
+                  {{ marketInsights.marketTrend }}
+                </div>
+              </div>
+
+              <!-- Sector Recommendations Card -->
+              <div class="insight-card">
+                <h6>🏭 Sector Focus</h6>
+                <p>{{ marketInsights.sectorRecommendations }}</p>
+              </div>
+            </div>
+
+            <!-- Economic Outlook Card -->
+            <div class="insight-card full-width">
+              <h6>📊 Economic Outlook</h6>
+              <p>{{ marketInsights.economicOutlook }}</p>
+            </div>
+
+            <!-- Key Insights Card -->
+            <div class="insight-card full-width">
+              <h6>🔑 Key AI Insights</h6>
+              <ul class="insights-list">
+                <li *ngFor="let insight of marketInsights.keyInsights">
+                  → {{ insight }}
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- No Market Insights Message -->
+          <div *ngIf="!marketInsights && !insightsLoading" class="no-data">
+            <div class="no-data-icon">🌍</div>
+            <h5>No Market Insights</h5>
+            <p>Click "Market" to get latest AI-powered market analysis</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Loading State for Full Analysis -->
+      <div *ngIf="loading" class="loading-section">
+        <div class="spinner-large"></div>
+        <h5>AI Analysis in Progress...</h5>
+        <p>Generating comprehensive investment insights</p>
+      </div>
+
+      <!-- Getting Started Message -->
+      <div *ngIf="!stockRecommendations.length && !portfolioAnalysis && !marketInsights && !loading" 
+           class="getting-started">
+        
+        <div class="getting-started-icon">🤖</div>
+        <h4>Welcome to AI Robo Advisor</h4>
+        <p class="lead">Get personalized investment insights powered by Google Gemini AI</p>
+        
+        <div class="features-grid">
+          <div class="feature-item">
+            <div class="feature-icon">📈</div>
+            <h6>Stock Recommendations</h6>
+            <small>AI-powered stock picks with reasoning</small>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon">🛡️</div>
+            <h6>Risk Analysis</h6>
+            <small>Portfolio risk assessment and optimization</small>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon">🌍</div>
+            <h6>Market Insights</h6>
+            <small>Current market trends and opportunities</small>
+          </div>
+        </div>
+
+        <button class="btn btn-primary btn-lg" (click)="getAllInsights()">
+          🚀 Start AI Analysis
+        </button>
+      </div>
+    </div>
+  </main>
+</div>

@@ -1,0 +1,128 @@
+.register-container {
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+  background-color: #f8f9fa;
+  box-sizing: border-box;
+  font-family: 'Times New Roman', Times, serif;
+}
+
+.register-box {
+  background-color: #fff;
+  padding: 2rem 2.5rem;
+  border-radius: 15px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 400px;
+  box-sizing: border-box;
+  font-family: 'Times New Roman', Times, serif;
+}
+
+h2 {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  font-weight: 700;
+  font-size: 1.7rem;
+  color: #2d3e50;
+  font-family: 'Times New Roman', Times, serif;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+  font-family: 'Times New Roman', Times, serif;
+}
+
+label {
+  display: block;
+  margin-bottom: 0.4rem;
+  font-weight: 600;
+  color: #2d3e50;
+  font-family: 'Times New Roman', Times, serif;
+}
+
+input,
+select {
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  font-size: 1rem;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+  font-family: 'Times New Roman', Times, serif;
+  transition: border-color 0.3s, box-shadow 0.3s;
+  background: #fff;
+  color: #2d3e50;
+}
+
+input:focus,
+select:focus {
+  border-color: #004aad;
+  box-shadow: 0 0 0 2px #004aad33;
+  outline: none;
+}
+
+input.invalid,
+select.invalid {
+  border-color: #d9534f;
+}
+
+.validation-error {
+  color: #d9534f;
+  font-size: 0.85rem;
+  margin-top: 0.2rem;
+  font-family: 'Times New Roman', Times, serif;
+}
+
+button {
+  width: 100%;
+  padding: 0.65rem;
+  font-weight: 700;
+  background-color: #004aad;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-family: 'Times New Roman', Times, serif;
+  transition: background-color 0.3s;
+}
+
+button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+button:not(:disabled):hover {
+  background-color: #003580;
+}
+
+.login-prompt {
+  margin-top: 1rem;
+  font-size: 0.9rem;
+  text-align: center;
+  color: #333;
+  font-family: 'Times New Roman', Times, serif;
+}
+
+.login-link {
+  margin-left: 0.3rem;
+  color: #004aad;
+  font-weight: 600;
+  text-decoration: none;
+  font-family: 'Times New Roman', Times, serif;
+}
+
+.login-link:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+@media (max-width: 600px) {
+  .register-box {
+    padding: 1.2rem 0.5rem;
+    max-width: 98vw;
+  }
+}

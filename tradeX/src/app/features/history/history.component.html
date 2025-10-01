@@ -1,0 +1,30 @@
+
+<div class="dashboard-container">
+  <app-sidebar></app-sidebar>
+
+  <main class="main-content">
+    <app-navbar></app-navbar>
+
+    <div class="trade-history-container">
+      <h2>Trading History</h2>
+
+      <ng-container *ngIf="isBrowser; else noGrid">
+        <div class="ag-theme-alpine trade-history-grid">
+          <ag-grid-angular
+            class="trade-history-grid"
+            [rowData]="rowData"
+            [columnDefs]="columnDefs"
+            [defaultColDef]="defaultColDef"
+            animateRows="true"
+            rowSelection="single"
+            (gridReady)="onGridReady($event)">
+          </ag-grid-angular>
+        </div>
+      </ng-container>
+
+      <ng-template #noGrid>
+        <p>Loading trade history grid...</p>
+      </ng-template>
+    </div>
+  </main>
+</div>

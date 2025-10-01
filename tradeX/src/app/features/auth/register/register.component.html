@@ -1,0 +1,98 @@
+<app-header></app-header>
+ 
+<div class="register-container">
+<div class="register-box">
+<h2>Register</h2>
+ 
+    <form [formGroup]="registerForm" (ngSubmit)="onRegister()" novalidate>
+<!-- Email -->
+<div class="form-group">
+<label for="email">Email</label>
+<input id="email" type="email" formControlName="email" placeholder="Enter your email" />
+<div *ngIf="registerForm.get('email')?.invalid && registerForm.get('email')?.touched" class="validation-error">
+<div *ngIf="registerForm.get('email')?.errors?.['required']">Email is required.</div>
+<div *ngIf="registerForm.get('email')?.errors?.['email']">Invalid email format.</div>
+</div>
+</div>
+ 
+      <!-- New Password -->
+<div class="form-group">
+<label for="newPassword">New Password</label>
+<input id="newPassword" type="password" formControlName="newPassword" placeholder="Enter your new password" />
+<div *ngIf="registerForm.get('newPassword')?.invalid && registerForm.get('newPassword')?.touched" class="validation-error">
+<div *ngIf="registerForm.get('newPassword')?.errors?.['required']">Password is required.</div>
+<div *ngIf="registerForm.get('newPassword')?.errors?.['minlength']">Password must be at least 8 characters.</div>
+<div *ngIf="registerForm.get('newPassword')?.errors?.['pattern']">
+            Password must contain uppercase, lowercase, number, and special character.
+</div>
+</div>
+</div>
+ 
+      <!-- Confirm Password -->
+<div class="form-group">
+<label for="confirmPassword">Confirm Password</label>
+<input id="confirmPassword" type="password" formControlName="confirmPassword" placeholder="Confirm your password" />
+<div *ngIf="registerForm.get('confirmPassword')?.touched && registerForm.errors?.['passwordMismatch']" class="validation-error">
+          Passwords do not match.
+</div>
+<div *ngIf="registerForm.get('confirmPassword')?.invalid && registerForm.get('confirmPassword')?.touched && !registerForm.errors?.['passwordMismatch']" class="validation-error">
+<div *ngIf="registerForm.get('confirmPassword')?.errors?.['required']">Confirm Password is required.</div>
+</div>
+</div>
+ 
+      <!-- Date of Birth -->
+<div class="form-group">
+<label for="dateOfBirth">Date of Birth</label>
+<input id="dateOfBirth" type="date" formControlName="dateOfBirth" />
+<div *ngIf="registerForm.get('dateOfBirth')?.touched && registerForm.get('dateOfBirth')?.invalid" class="validation-error">
+<div *ngIf="registerForm.get('dateOfBirth')?.errors?.['required']">Date of Birth is required.</div>
+<div *ngIf="registerForm.get('dateOfBirth')?.errors?.['underAge']">You must be at least 18 years old.</div>
+</div>
+</div>
+ 
+      <!-- Country -->
+<div class="form-group">
+<label for="country">Country</label>
+<input id="country" type="text" formControlName="country" placeholder="Enter country (IN/US)" />
+<div *ngIf="registerForm.get('country')?.invalid && registerForm.get('country')?.touched" class="validation-error">
+          Country is required.
+</div>
+</div>
+ 
+      <!-- Postal Code -->
+<div class="form-group">
+<label for="postalCode">Postal Code</label>
+<input id="postalCode" type="text" formControlName="postalCode" placeholder="Enter postal code" />
+<div *ngIf="registerForm.get('postalCode')?.invalid && registerForm.get('postalCode')?.touched" class="validation-error">
+          Postal Code is required.
+</div>
+</div>
+ 
+      <!-- Identification Type -->
+<div class="form-group" *ngIf="idTypes.length > 0">
+<label for="idType">Identification Type</label>
+<select id="idType" formControlName="idType">
+<option value="" disabled>Select ID Type</option>
+<option *ngFor="let type of idTypes" [value]="type">{{ type }}</option>
+</select>
+<div *ngIf="registerForm.get('idType')?.invalid && registerForm.get('idType')?.touched" class="validation-error">
+          Identification Type is required.
+</div>
+</div>
+ 
+      <!-- Identification Value -->
+<div class="form-group" *ngIf="idTypes.length > 0">
+<label for="idValue">Identification Value</label>
+<input id="idValue" type="text" formControlName="idValue" placeholder="Enter ID value" />
+<div *ngIf="registerForm.get('idValue')?.invalid && registerForm.get('idValue')?.touched" class="validation-error">
+          Identification Value is required.
+</div>
+</div>
+ 
+      <!-- Submit Button -->
+<button type="submit" [disabled]="registerForm.invalid">Register</button>
+</form>
+</div>
+</div>
+ 
+<app-footer></app-footer>

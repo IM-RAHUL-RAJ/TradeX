@@ -1,0 +1,118 @@
+.dashboard-container {
+  display: flex;
+  height: 100vh; /* Full viewport height */
+  overflow: hidden; /* Prevent outer scroll */
+  font-family: 'Times New Roman', Times, serif;
+}
+
+/* Sidebar fixed full height and sticky on scroll */
+.sidebar {
+  width: 200px;
+  height: 100vh;
+  position: sticky;
+  top: 0;
+  background-color: #007acc;
+  color: white;
+  padding: 1rem;
+  box-sizing: border-box;
+  overflow-y: auto; /* In case sidebar has too many links */
+  font-family: 'Times New Roman', Times, serif;
+}
+
+/* Content area next to sidebar */
+.content-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  font-family: 'Times New Roman', Times, serif;
+}
+
+/* Navbar inside content area - fixed height */
+.top-navbar {
+  flex-shrink: 0;
+  height: 56px; /* Adjust as needed */
+  background-color: #fff;
+  border-bottom: 1px solid #ddd;
+  display: flex;
+  align-items: center;
+  padding: 0 1.5rem;
+  box-sizing: border-box;
+  font-family: 'Times New Roman', Times, serif;
+}
+
+/* Main content area scrollable with inner scrollbar */
+.main-content {
+  flex: 1;
+  overflow-y: auto; /* Inner scrollbar */
+  background: #f9f9f9;
+  padding: 1rem 2rem;
+  font-family: 'Times New Roman', Times, serif;
+}
+
+/* Summary cards & grid styling */
+.summary-cards {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.summary-cards .card {
+  flex: 1;
+  background: white;
+  border-radius: 8px;
+  padding: 1rem 1.5rem;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  text-align: center;
+  font-family: 'Times New Roman', Times, serif;
+}
+
+.summary-cards .card h3 {
+  margin-bottom: 0.25rem;
+  font-weight: 600;
+  color: #333;
+  font-family: 'Times New Roman', Times, serif;
+}
+
+.summary-cards .card p {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #007acc;
+  margin: 0;
+  font-family: 'Times New Roman', Times, serif;
+}
+
+.portfolio-table-section {
+  background: white;
+  border-radius: 8px;
+  padding: 1rem 1rem 1.5rem 1rem;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+  font-family: 'Times New Roman', Times, serif;
+}
+
+.portfolio-table-section h2 {
+  margin-bottom: 1rem;
+  color: #333;
+  font-family: 'Times New Roman', Times, serif;
+}
+
+.portfolio-table-section .cash-balance {
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+  font-weight: 600;
+  font-family: 'Times New Roman', Times, serif;
+}
+
+.portfolio-grid {
+  height: 400px;
+  width: 100%;
+  font-family: 'Times New Roman', Times, serif;
+}
+
+.ag-theme-alpine {
+  height: 100%;
+  width: 100%;
+  font-family: 'Times New Roman', Times, serif;
+}

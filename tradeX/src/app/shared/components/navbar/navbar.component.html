@@ -1,0 +1,117 @@
+<!--
+  Navigation Bar Component
+  ------------------------
+  This component provides the main navigation bar for the tradeX application.
+  It includes:
+    - A greeting and quick link to update investment preferences (left)
+    - A search bar for stocks and portfolio (center)
+    - A user profile dropdown with profile, preferences, help, and logout (right)
+-->
+<nav class="top-navbar">
+  <!-- Left section: User greeting and preferences link -->
+  <div class="navbar-left">
+    <div class="user-greeting">
+      <div class="hello">Welcome back!</div>
+      <!-- Link to update investment preferences -->
+      <a (click)="navigateToPreferences()" class="update-preferences">Update Investment Preferences</a>
+    </div>
+  </div>
+
+  <!-- Center section: Search bar for stocks and portfolio -->
+  <div class="navbar-center">
+    <div class="search-container">
+      <!-- Search input and button -->
+      <input 
+        type="text" 
+        placeholder="Search stocks, portfolio..." 
+        class="search-input"
+        [(ngModel)]="searchQuery"
+        (keyup.enter)="onSearch()"
+      />
+      <button aria-label="Search" class="search-button" (click)="onSearch()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8"></circle>
+          <path d="m21 21-4.35-4.35"></path>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Right section: Wallet icon and User profile dropdown -->
+  <div class="navbar-right">
+
+    <!-- Wallet icon and balance container -->
+    <div class="wallet-icon-container" title="Wallet" (click)="openWalletModal()">
+      <mat-icon aria-label="Wallet Icon">account_balance_wallet</mat-icon>
+      <span class="wallet-balance">{{ cashBalance | currency }}</span>
+    </div>
+
+    <div class="user-profile" [class.active]="isDropdownOpen">
+      <!-- User avatar and dropdown toggle -->
+      <button class="user-avatar" (click)="toggleDropdown()" title="{{ userName }}">
+        <img 
+          *ngIf="userAvatar" 
+          [src]="userAvatar" 
+          [alt]="userName"
+          class="avatar-image"
+        />
+        <!-- If no avatar, show initials -->
+        <div *ngIf="!userAvatar" class="avatar-placeholder">
+          {{ getInitials(userName) }}
+        </div>
+        <svg class="dropdown-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="6,9 12,15 18,9"></polyline>
+        </svg>
+      </button>
+
+      <!-- Dropdown menu with user info and actions -->
+      <div class="dropdown-menu" *ngIf="isDropdownOpen">
+        <div class="dropdown-header">
+          <div class="user-info">
+            <div class="user-name">{{ userName }}</div>
+            <div class="user-email">{{ emailFromState }}</div>
+          </div>
+        </div>
+        <div class="dropdown-divider"></div>
+        <!-- Profile, preferences, help links -->
+        <ul class="dropdown-items">
+          <li><a (click)="navigateToProfile()" class="dropdown-item">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+              <circle cx="12" cy="7" r="4"></circle>
+            </svg>
+            Profile Settings
+          </a></li>
+          <li><a (click)="navigateToPreferences()" class="dropdown-item">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="3"></circle>
+              <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1 1.51V5a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+            </svg>
+            Investment Preferences
+          </a></li>
+          <li><a (click)="navigateToHelp()" class="dropdown-item">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"></circle>
+              <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+              <path d="M12 17h.01"></path>
+            </svg>
+            Help & Support
+          </a></li>
+        </ul>
+        <div class="dropdown-divider"></div>
+        <!-- Logout link -->
+        <ul class="dropdown-items">
+          <li><a (click)="logout()" class="dropdown-item logout-item">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+              <polyline points="16,17 21,12 16,7"></polyline>
+              <line x1="21" y1="12" x2="9" y2="12"></line>
+            </svg>
+            Logout
+          </a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</nav>
+ 

@@ -1,0 +1,105 @@
+<div class="dashboard-container">
+  <app-sidebar></app-sidebar>
+
+  <main class="main-content">
+    <app-navbar></app-navbar>
+
+    <div class="reports-container">
+      <!-- Header -->
+      <div class="reports-header">
+        <h2>Reports</h2>
+        <p>Client ID: <span class="client-id">{{ currentClientId }}</span></p>
+      </div>
+
+      <!-- Report Selector -->
+      <div class="report-selector">
+        <div class="selector-group">
+          <label for="reportSelect">Select Report Type:</label>
+          <select 
+            id="reportSelect" 
+            [(ngModel)]="selectedReport" 
+            [disabled]="loading"
+            class="report-select">
+            <option value="">-- Choose a report --</option>
+            <option *ngFor="let report of availableReports" [value]="report">
+              {{ report }}
+            </option>
+          </select>
+          <button 
+            (click)="generateReport()" 
+            [disabled]="!selectedReport || loading"
+            class="generate-btn">
+            <span *ngIf="loading" class="spinner"></span>
+            {{ loading ? 'Generating...' : 'Generate Report' }}
+          </button>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="action-buttons" *ngIf="selectedReport">
+        <button (click)="refreshReport()" [disabled]="loading" class="action-btn refresh">
+          Refresh
+        </button>
+        <button (click)="exportReport()" *ngIf="generatedReport.length > 0" class="action-btn export">
+          Export CSV
+        </button>
+        <button (click)="clearReport()" class="action-btn clear">
+          Clear
+        </button>
+      </div>
+
+      <!-- Message -->
+      <div *ngIf="message" class="message" [ngClass]="{
+        'error': message.includes('Error') || message.includes('not found'),
+        'success': message.includes('Generated') || message.includes('exported'),
+        'warning': message.includes('No data') || message.includes('Please')
+      }">
+        {{ message }}
+      </div>
+
+      <!-- Loading -->
+      <div *ngIf="loading" class="loading">
+        <div class="loading-spinner"></div>
+        <p>Generating report...</p>
+      </div>
+
+      <!-- Report Results -->
+      <div *ngIf="generatedReport.length > 0 && !loading" class="report-result">
+        <!-- Summary -->
+        <div class="report-summary">
+          <h3>{{ selectedReport }}</h3>
+          <p>{{ getReportSummary() }}</p>
+          <p>Generated: {{ getCurrentDateTime() }}</p>
+        </div>
+
+        <!-- Table -->
+        <div class="table-container">
+          <table class="report-table">
+            <thead>
+              <tr>
+                <th *ngFor="let header of getTableHeaders()">
+                  {{ formatHeaderName(header) }}
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let row of generatedReport; let i = index">
+                <td *ngFor="let value of objectValues(row)">
+                  {{ value }}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- No Data -->
+      <div *ngIf="!loading && selectedReport && generatedReport.length === 0 && message" class="no-data">
+        <h3>No Data Available</h3>
+        <p>No records found for {{ selectedReport }}.</p>
+        <button (click)="generateReport()" class="retry-btn">Try Again</button>
+      </div>
+    </div>
+  </main>
+</div>
+ 

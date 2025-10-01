@@ -1,0 +1,100 @@
+<div class="layout-container">
+  <!-- Sidebar -->
+  <app-sidebar></app-sidebar>
+
+  <!-- Main content area -->
+  <div class="main-content">
+    <!-- Navbar -->
+    <app-navbar></app-navbar>
+
+    <!-- Trade content -->
+    <div class="trade-container">
+      <!-- Category + Search -->
+       <div class="header-controls">
+  <!-- Category -->
+  <mat-form-field appearance="fill" class="category-field">
+    <mat-label>Select Category</mat-label>
+    <mat-select [(value)]="selectedCategory" (selectionChange)="onCategoryChange()">
+      <mat-option value="">All</mat-option>
+      <mat-option *ngFor="let cat of categories" [value]="cat">{{ cat }}</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <!-- Search -->
+  <mat-form-field appearance="outline" class="search-field">
+    <mat-label>Search or Select Instrument</mat-label>
+    <input type="text"
+           matInput
+           [matAutocomplete]="auto"
+           [(ngModel)]="searchTerm"
+           (ngModelChange)="onInstrumentSearchChange()"
+           placeholder="Type or select..." />
+    <button *ngIf="searchTerm" mat-icon-button matSuffix (click)="clearInstrumentSearch()">
+      <mat-icon>close</mat-icon>
+    </button>
+    <mat-autocomplete #auto="matAutocomplete"
+                      (optionSelected)="onInstrumentSelect($event.option.value)">
+      <mat-option *ngFor="let instr of filteredInstrumentList" [value]="instr.instrumentId">
+        {{ instr.instrumentDescription }}
+      </mat-option>
+    </mat-autocomplete>
+  </mat-form-field>
+</div>
+
+
+      <!-- Instrument details -->
+      <div *ngIf="selectedInstrument" class="instrument-details">
+        <h2>{{ selectedInstrument.instrument.instrumentDescription }}</h2>
+        <div class="current-price">
+          $ {{ selectedInstrument.askPrice }}
+        </div>
+        <div class="price-info">
+          Bid: {{ selectedInstrument.bidPrice }} | Ask: {{ selectedInstrument.askPrice }}
+        </div>
+
+        <!-- Chart -->
+        <div id="stockChart" class="stock-chart"></div>
+
+        <!-- Actions -->
+        <div class="action-buttons">
+          <button mat-raised-button color="primary" (click)="openTradeDialog('buy')">BUY</button>
+          <button mat-stroked-button color="warn" (click)="openTradeDialog('sell')">SELL</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Unified BUY/SELL Popup -->
+<ng-template #tradeDialog>
+  <div class="popup-container">
+    <h2>{{ popupMode | uppercase }} - {{ selectedInstrument?.instrument?.instrumentDescription }}</h2>
+
+    <mat-form-field appearance="outline" style="width:100%; margin-bottom: 16px;">
+      <mat-label>Quantity</mat-label>
+      <input matInput type="number" [(ngModel)]="quantity" (input)="calculateTotal()" min="1" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" style="width:100%; margin-bottom: 16px;">
+      <mat-label>{{ popupMode === 'buy' ? 'Ask Price' : 'Bid Price' }}</mat-label>
+  <input matInput type="number" [(ngModel)]="tradePrice" (input)="calculateTotal()" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" style="width:100%; margin-bottom: 16px;">
+      <mat-label>Target Price</mat-label>
+      <input matInput type="number" [(ngModel)]="totalPrice" />
+    </mat-form-field>
+
+    <!-- ERROR MESSAGE DISPLAY -->
+    <div class="error-message" *ngIf="tradeErrorMessage" style="color: red; margin-bottom: 12px;">
+      {{ tradeErrorMessage }}
+    </div>
+
+    <div class="action-row">
+  <button *ngIf="popupMode === 'buy'" mat-raised-button color="primary" (click)="tradeAction()">BUY</button>
+  <button *ngIf="popupMode === 'sell'" mat-stroked-button color="warn" (click)="tradeAction()">SELL</button>
+      <button mat-button (click)="closeDialog()">Cancel</button>
+    </div>
+  </div>
+</ng-template>
+ 

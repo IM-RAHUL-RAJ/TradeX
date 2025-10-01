@@ -1,0 +1,43 @@
+.dashboard-container {
+  display: flex;
+  height: calc(100vh - 56px); /* Assuming navbar is 56px height */
+  font-family: Arial, sans-serif;
+  background: #f9f9f9;
+}
+
+/* main content next to sidebar */
+.main-content {
+  flex: 1;
+  padding: 1rem 2rem;
+  overflow-y: auto;
+
+  .trade-history-container {
+    background: white;
+    border-radius: 8px;
+    padding: 1rem;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+
+    h2 {
+      margin-bottom: 1rem;
+      color: #333;
+    }
+  }
+}
+
+/* The sidebar height is full viewport minus navbar */
+app-sidebar {
+  height: 100%;
+}
+
+/* Grid styling */
+.trade-history-grid {
+  border: 1px #ccc;
+  border-radius: 4px;
+  width: 100%;
+  height: 500px; /* explicit height for ag-Grid */
+}
+
+.ag-theme-alpine {
+  width: 100%;
+  height: 100%; /* fill parent */
+}

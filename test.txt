@@ -1,0 +1,1 @@
+sqlplus admin/SR2025fmr@'a900001-tradex-db.cj6ui28e0bu9.ap-south-1.rds.amazonaws.com:1521/ORCL' 
