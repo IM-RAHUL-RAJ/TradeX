@@ -22,6 +22,7 @@ CREATE TABLE preferences(
     riskTolerance VARCHAR(50),
     incomeCategory VARCHAR(50),
     lengthOfInvestment VARCHAR(50),
+    roboAdvisor NUMBER(1) DEFAULT 0,
     FOREIGN KEY(clientId) REFERENCES client(clientId)
 );
 
